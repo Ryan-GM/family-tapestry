@@ -15,8 +15,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { layoutTree, matchesQuery, setRootPerson, shortName } from "@/lib/genealogy";
-import { createPerson, deletePerson, treeBundleQuery, updatePerson, type PersonDraft } from "@/lib/tree-data";
+import { layoutTree, matchesQuery, shortName } from "@/lib/genealogy";
+import {
+  createPerson,
+  deletePerson,
+  setRootPerson,
+  treeBundleQuery,
+  updatePerson,
+  type PersonDraft,
+} from "@/lib/tree-data";
 
 export const Route = createFileRoute("/_authenticated/trees/$treeId")({
   head: () => ({
