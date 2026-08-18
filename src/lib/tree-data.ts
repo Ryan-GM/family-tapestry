@@ -150,7 +150,10 @@ export async function createTree(input: {
     } as never)
     .select("*")
     .single();
-  if (error) throw error;
+  if (error) {
+    if (import.meta.env.DEV) console.error("[createTree] insert failed", error);
+    throw new Error(`Unable to create family tree. ${error.message}${error.code ? ` (${error.code})` : ""}`);
+  }
   return data as unknown as FamilyTree;
 }
 
