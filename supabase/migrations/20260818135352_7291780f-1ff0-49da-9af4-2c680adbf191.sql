@@ -1,0 +1,1 @@
+DELETE FROM public.family_trees WHERE name IN ('diag flow','diag2','diag flow2');
