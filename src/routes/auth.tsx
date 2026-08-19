@@ -29,6 +29,18 @@ function AuthPage() {
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
 
+  // Already signed in (e.g. returning from an OAuth redirect): go to the dashboard.
+  useEffect(() => {
+    let active = true;
+    supabase.auth.getSession().then(({ data }) => {
+      if (active && data.session) navigate({ to: "/trees", replace: true });
+    });
+    return () => {
+      active = false;
+    };
+  }, [navigate]);
+
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
