@@ -32,15 +32,43 @@ const FEATURES = [
 ];
 
 function Landing() {
+  const navigate = useNavigate();
+  const [signedIn, setSignedIn] = useState(false);
+
+  // OAuth (Google) returns here via a full-page redirect. Once the session is
+  // hydrated from storage, an authenticated visitor belongs on the dashboard —
+  // "no trees yet" is not the same state as "not signed in".
+  useEffect(() => {
+    let active = true;
+    supabase.auth.getSession().then(({ data }) => {
+      if (!active) return;
+      if (data.session) {
+        setSignedIn(true);
+        navigate({ to: "/trees", replace: true });
+      }
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!active) return;
+      setSignedIn(!!session);
+      if (session && (event === "SIGNED_IN" || event === "INITIAL_SESSION")) {
+        navigate({ to: "/trees", replace: true });
+      }
+    });
+    return () => {
+      active = false;
+      sub.subscription.unsubscribe();
+    };
+  }, [navigate]);
+
   return (
     <main className="star-field min-h-screen">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
         <span className="font-display text-lg text-gradient-brand">Heirloom</span>
         <Link
-          to="/auth"
+          to={signedIn ? "/trees" : "/auth"}
           className="rounded-full border border-border px-4 py-2 text-sm transition-colors hover:border-primary hover:text-primary"
         >
-          Sign in
+          {signedIn ? "Your family trees" : "Sign in"}
         </Link>
       </header>
 
@@ -60,14 +88,17 @@ function Landing() {
           >
             Start a family tree
           </Link>
-          <Link
-            to="/auth"
-            className="rounded-full border border-border px-6 py-3 text-sm transition-colors hover:border-primary"
-          >
-            I have an account
-          </Link>
+          {!signedIn && (
+            <Link
+              to="/auth"
+              className="rounded-full border border-border px-6 py-3 text-sm transition-colors hover:border-primary"
+            >
+              I have an account
+            </Link>
+          )}
         </div>
       </section>
+
 
       <section className="mx-auto grid max-w-5xl gap-3 px-6 pb-24 sm:grid-cols-2">
         {FEATURES.map(({ icon: Icon, title, body }) => (
