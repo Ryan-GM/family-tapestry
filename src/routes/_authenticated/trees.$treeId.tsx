@@ -26,14 +26,12 @@ import {
 } from "@/lib/tree-data";
 
 export const Route = createFileRoute("/_authenticated/trees/$treeId")({
-  head: () => ({
-    meta: [
-      { title: "Family tree canvas — Heirloom" },
-      { name: "description", content: "Explore, expand and edit your family tree on an interactive canvas." },
-      { property: "og:title", content: "Family tree canvas — Heirloom" },
-      { property: "og:description", content: "An interactive map of people and relationships that redraws itself." },
-    ],
-  }),
+  head: () =>
+    seo({
+      title: "Family tree canvas — Heirloom",
+      description: "Explore, expand and edit your family tree on an interactive canvas.",
+      indexable: false,
+    }),
   component: TreeWorkspace,
 });
 
