@@ -43,3 +43,38 @@ export function authRedirectOrigin(): string {
 }
 
 export const OG_IMAGE = absoluteUrl("/og-image.jpg");
+
+type SeoInput = {
+  title: string;
+  description: string;
+  /** Same-origin path this page is canonical for. Omit for private pages. */
+  path?: string;
+  /** Set false for private/app pages that should stay out of search results. */
+  indexable?: boolean;
+};
+
+/** Shared head() payload: title, description, OG/Twitter cards, canonical. */
+export function seo({ title, description, path, indexable = true }: SeoInput) {
+  const url = path ? absoluteUrl(path) : undefined;
+  const meta = [
+    { title },
+    { name: "description", content: description },
+    { property: "og:site_name", content: SITE_NAME },
+    { property: "og:type", content: "website" as const },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    ...(siteOrigin
+      ? [
+          { property: "og:image", content: OG_IMAGE },
+          { name: "twitter:image", content: OG_IMAGE },
+        ]
+      : []),
+    ...(url && siteOrigin ? [{ property: "og:url", content: url }] : []),
+    ...(indexable ? [] : [{ name: "robots", content: "noindex, nofollow" }]),
+  ];
+  const links = url && siteOrigin ? [{ rel: "canonical", href: url }] : [];
+  return { meta, links };
+}
