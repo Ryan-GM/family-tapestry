@@ -8,16 +8,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { HeirloomLogo } from "@/components/brand/HeirloomLogo";
+import { authRedirectOrigin, seo } from "@/lib/site";
 
 export const Route = createFileRoute("/auth")({
-  head: () => ({
-    meta: [
-      { title: "Sign in — Heirloom family trees" },
-      { name: "description", content: "Sign in to build and share your private family tree on Heirloom." },
-      { property: "og:title", content: "Sign in — Heirloom family trees" },
-      { property: "og:description", content: "Private, invite-only family trees you can expand one relative at a time." },
-    ],
-  }),
+  head: () =>
+    seo({
+      title: "Sign in — Heirloom",
+      description: "Sign in to build and share your private family tree on Heirloom.",
+      path: "/auth",
+    }),
   component: AuthPage,
 });
 
@@ -49,7 +49,7 @@ function AuthPage() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { data: { display_name: name }, emailRedirectTo: window.location.origin },
+          options: { data: { display_name: name }, emailRedirectTo: `${authRedirectOrigin()}/auth/callback` },
         });
         if (error) throw error;
         toast.success("Account created. You're in.");
@@ -66,7 +66,7 @@ function AuthPage() {
   };
 
   const google = async () => {
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: authRedirectOrigin() });
     if (result.error) {
       toast.error("Google sign-in failed.");
       return;
@@ -78,8 +78,8 @@ function AuthPage() {
   return (
     <main className="star-field grid min-h-screen place-items-center px-4 py-12">
       <div className="w-full max-w-md">
-        <Link to="/" className="font-display text-lg text-gradient-brand">
-          Heirloom
+        <Link to="/" aria-label="Heirloom home">
+          <HeirloomLogo />
         </Link>
         <h1 className="mt-6 font-display text-3xl">
           {mode === "signin" ? "Welcome back" : "Start your family record"}

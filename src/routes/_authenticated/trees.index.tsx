@@ -9,16 +9,16 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { createTree, treesQuery } from "@/lib/tree-data";
+import { HeirloomLogo } from "@/components/brand/HeirloomLogo";
+import { seo } from "@/lib/site";
 
 export const Route = createFileRoute("/_authenticated/trees/")({
-  head: () => ({
-    meta: [
-      { title: "Your family trees — Heirloom" },
-      { name: "description", content: "All the private family trees you own or have been invited to." },
-      { property: "og:title", content: "Your family trees — Heirloom" },
-      { property: "og:description", content: "Open a family tree or start a new one from any relative you know." },
-    ],
-  }),
+  head: () =>
+    seo({
+      title: "Your family trees — Heirloom",
+      description: "All the private family trees you own or have been invited to.",
+      indexable: false,
+    }),
   component: TreesPage,
 });
 
@@ -54,8 +54,8 @@ function TreesPage() {
     <main className="star-field min-h-screen px-6 py-8">
       <div className="mx-auto max-w-4xl">
         <header className="flex items-center justify-between">
-          <Link to="/" className="font-display text-lg text-gradient-brand">
-            Heirloom
+          <Link to="/" aria-label="Heirloom home">
+            <HeirloomLogo />
           </Link>
           <Button variant="ghost" size="sm" onClick={() => supabase.auth.signOut().then(() => navigate({ to: "/auth" }))}>
             Sign out
