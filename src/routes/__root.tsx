@@ -79,11 +79,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "theme-color", content: "#0b1114" },
+      { name: "apple-mobile-web-app-title", content: SITE_NAME },
       { title: "Heirloom — family trees that start anywhere" },
       {
         name: "description",
         content: "A private, interactive family tree you can grow one relative at a time.",
       },
+      { property: "og:site_name", content: SITE_NAME },
       { property: "og:title", content: "Heirloom — family trees that start anywhere" },
       {
         property: "og:description",
@@ -93,6 +96,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
+      { rel: "manifest", href: "/site.webmanifest" },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "icon", type: "image/x-icon", href: "/favicon.ico", sizes: "48x48" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
