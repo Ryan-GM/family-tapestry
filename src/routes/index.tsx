@@ -3,24 +3,18 @@ import { GitBranch, Search, Sparkles, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
+import { HeirloomLogo } from "@/components/brand/HeirloomLogo";
+import { seo } from "@/lib/site";
 
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Heirloom — build your family tree from anyone" },
-      {
-        name: "description",
-        content:
-          "Heirloom is a private, interactive family tree. Start with any relative you know and expand your genealogy one connection at a time.",
-      },
-      { property: "og:title", content: "Heirloom — build your family tree from anyone" },
-      {
-        property: "og:description",
-        content: "Start anywhere, add one relative, and let the tree draw itself. Private by default.",
-      },
-    ],
-  }),
+  head: () =>
+    seo({
+      title: "Heirloom — build your family tree from anyone",
+      description:
+        "Heirloom is a private, interactive family tree. Start with any relative you know and expand your genealogy one connection at a time.",
+      path: "/",
+    }),
   component: Landing,
 });
 
@@ -63,7 +57,7 @@ function Landing() {
   return (
     <main className="star-field min-h-screen">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-        <span className="font-display text-lg text-gradient-brand">Heirloom</span>
+        <HeirloomLogo />
         <Link
           to={signedIn ? "/trees" : "/auth"}
           className="rounded-full border border-border px-4 py-2 text-sm transition-colors hover:border-primary hover:text-primary"
