@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { layoutTree, matchesQuery, shortName } from "@/lib/genealogy";
+import { seo } from "@/lib/site";
 import {
   createPerson,
   deletePerson,
